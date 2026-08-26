@@ -8,10 +8,10 @@ import (
 
 
 type LinkClient interface {
-	Create(ctx context.Context, req dto.CreateLink) (dto.Link, error)
+	Create(ctx context.Context, req dto.CreateLink, user_id uint64) (dto.Link, error)
 	Get(ctx context.Context, idx uint64) (dto.Link, error)
-	GetByUser(ctx context.Context, limit uint32, offset uint32) ([]dto.Link, error)
-	Delete(ctx context.Context) 
+	GetByUser(ctx context.Context, user_id uint64, limit uint32, offset uint32) ([]dto.Link, error)
+	Delete(ctx context.Context, idx uint64) error
 }
 
 type UserClient interface {

@@ -2,25 +2,24 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
-)
 
+	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/config"
+)
 
 type Server struct {
 	httpServer * http.Server
 }
 
-
 func New(
 	handler http.Handler,
-	port string,
+	cfg config.Config,
 ) *Server {
 
 	return &Server{
 		httpServer: &http.Server{
-			Addr: fmt.Sprintf(":%s", port),
+			Addr: cfg.HttpAddr,
 			Handler: handler,
 			ReadTimeout: 5 * time.Second,
 			WriteTimeout: 10 * time.Second,

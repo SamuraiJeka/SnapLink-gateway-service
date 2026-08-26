@@ -6,18 +6,14 @@ import (
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/handler"
 )
 
+type Handlers struct {
+	Link *handler.LinkHandler
+}
 
-func NewRouter(
-	linkHandler *handler.LinkHandler,
-) http.Handler {
+func NewRouter(h Handlers) http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc(
-		"POST /api/v1/links",
-		linkHandler.Create,
-	)
+	registerLinkRouter(mux, h.Link)
 
-	var handler http.Handler = mux
-
-	return handler
+	return mux
 }
