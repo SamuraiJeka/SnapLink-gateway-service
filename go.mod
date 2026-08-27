@@ -3,7 +3,7 @@ module github.com/SamuraiJeka/SnapLink-gateway-service
 go 1.25.4
 
 require (
-	github.com/SamuraiJeka/SnapLink-proto v0.1.0 // indirect
+	github.com/SamuraiJeka/SnapLink-proto v0.2.1 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect

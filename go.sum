@@ -1,5 +1,9 @@
 github.com/SamuraiJeka/SnapLink-proto v0.1.0 h1:9BdeM5sVX5XADdhkL0mTkUZmQ1fcnX0fLI0PEdnzUHI=
 github.com/SamuraiJeka/SnapLink-proto v0.1.0/go.mod h1:m5QtBtSG8nxyRZFMNV1BSpvQPIGwcGwAd6WSQd3svx8=
+github.com/SamuraiJeka/SnapLink-proto v0.2.0 h1:P+ea0XknHAqu0/oMTmZ0Wdnx+F+vj+BkBWjEtDOllF8=
+github.com/SamuraiJeka/SnapLink-proto v0.2.0/go.mod h1:m5QtBtSG8nxyRZFMNV1BSpvQPIGwcGwAd6WSQd3svx8=
+github.com/SamuraiJeka/SnapLink-proto v0.2.1 h1:dt6I3iXkV3rb2aiTxbcQpZ4emRsmcrgFT0dYjR6D3S8=
+github.com/SamuraiJeka/SnapLink-proto v0.2.1/go.mod h1:m5QtBtSG8nxyRZFMNV1BSpvQPIGwcGwAd6WSQd3svx8=
 golang.org/x/net v0.55.0 h1:bcvxaJn3e1U6InsFWt1JUq1aSjnRxLzT2rtD2KfkDF8=
 golang.org/x/net v0.55.0/go.mod h1:L5U2KuzuOe1lY7Z+aWVIKK6qEeJXnXV9yzGA+WCHJww=
 golang.org/x/sys v0.45.0 h1:dO4czNzziLiiXplLQgBCEpCvXQ3dnkn0SdaZSYdQ+FY=

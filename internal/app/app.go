@@ -22,15 +22,23 @@ func New(cfg *config.Config) (server.Server, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	authConn, err := grpc.NewClient(cfg.AuthGRPC)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	linkClient := client.NewLinkClient(linkConn)
+	authClient := client.NewAuthClient(authConn)
 
 	linkService := service.NewLinkService(linkClient)
+	authService := service.NewAuthService(authClient)
 
 	linkHandler := handler.NewLinkhandler(*linkService)
+	authHandler := handler.NewAuthHandler(*authService)
 
 	router := server.NewRouter(server.Handlers{
 		Link: linkHandler,
+		Auth: authHandler,
 	})
 
 	httpServer := server.New(router, *cfg)

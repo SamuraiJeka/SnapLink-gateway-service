@@ -20,7 +20,9 @@ type UserClient interface {
 }
 
 type AuthClient interface {
-	Registration(ctx context.Context)
-	Login(ctx context.Context)
-	Refresh(ctx context.Context)
+	Register(ctx context.Context, req dto.Register) (dto.TokenResponse, error)
+	Login(ctx context.Context, req dto.Login) (dto.TokenResponse, error)
+	Refresh(ctx context.Context, req dto.Refresh) (dto.TokenResponse, error)
+	Logout(ctx context.Context, req dto.Refresh) error
+	ValidateAccessToken(ctx context.Context, req dto.ValidateRequest) (dto.ValidateResponse, error)
 }
