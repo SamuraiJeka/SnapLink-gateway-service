@@ -53,3 +53,22 @@ func toDtoValidate(vld *authv1.ValidateAccessTokenResponse) dto.ValidateResponse
 		User_id: vld.UserId,
 	}
 }
+
+func toDtoPublicKey(req *authv1.GetPyblicKeyResponse) []dto.PublicKey {
+	public_keys := make([]dto.PublicKey, len(req.Keys))
+	
+	for _, key := range req.Keys {
+		public_keys = append(
+			public_keys,
+			dto.PublicKey{
+				Id: key.Kid,
+				Algorithm: key.Algorithm,
+				KeyType: key.KeyType,
+				Curve: key.Curve,
+				Key: key.PublicKey,
+			},
+		)
+	}
+
+	return public_keys
+}

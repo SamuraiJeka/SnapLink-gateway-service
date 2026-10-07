@@ -99,3 +99,17 @@ func (c *AuthClient) ValidateAccessToken(
 
 	return toDtoValidate(resp), nil
 }
+
+func (c *AuthClient) GetPublicKey(
+	ctx context.Context,
+) ([]dto.PublicKey, error) {
+	resp, err := c.client.GetPyblicKey(
+		ctx,
+		&authv1.GetPyblicKeyRequest{},
+	)
+	if err != nil {
+		return []dto.PublicKey{}, nil
+	}
+
+	return toDtoPublicKey(resp), err
+}

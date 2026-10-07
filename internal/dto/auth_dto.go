@@ -29,3 +29,11 @@ type ValidateResponse struct {
 	Valid bool `json:"valid"`
 	User_id uint64 `json:"user_id"`
 }
+
+type PublicKey struct {
+	Id string
+	Algorithm string
+	KeyType string
+	Curve string
+	Key []byte
+}

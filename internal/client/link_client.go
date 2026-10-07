@@ -32,7 +32,7 @@ func (c *LinkClient) Create(
 		return dto.Link{}, err
 	}
 
-	return toDtoLink(resp.Link), nil
+	return toDtoLink(resp), nil
 }
 
 func (c *LinkClient) Get(
@@ -49,7 +49,7 @@ func (c *LinkClient) Get(
 		return dto.Link{}, err
 	}
 
-	return toDtoLink(resp.Link), nil
+	return toDtoLink(resp), nil
 }
 
 func (c *LinkClient) GetByUser(

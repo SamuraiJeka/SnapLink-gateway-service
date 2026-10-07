@@ -13,11 +13,12 @@ import (
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/client"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/config"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/handler"
+	keyprovider "github.com/SamuraiJeka/SnapLink-gateway-service/internal/key_provider"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/server"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/service"
 )
 
-func New(cfg *config.Config) (server.Server, error) {
+func New(cfg *config.Config) (*server.Server, error) {
 	linkConn, err := grpc.NewClient(cfg.LinkGRPC)
 	if err != nil {
 		log.Fatal(err)
@@ -29,6 +30,17 @@ func New(cfg *config.Config) (server.Server, error) {
 
 	linkClient := client.NewLinkClient(linkConn)
 	authClient := client.NewAuthClient(authConn)
+
+	ctx, cancel := context.WithTimeout(
+	context.Background(),
+	5*time.Second,
+	)
+	defer cancel()
+
+	keyProvider := keyprovider.NewKeyProvider(*authClient)
+	if err := keyProvider.Refresh(ctx); err != nil {
+		return nil, err
+	}
 
 	linkService := service.NewLinkService(linkClient)
 	authService := service.NewAuthService(authClient)
@@ -43,7 +55,7 @@ func New(cfg *config.Config) (server.Server, error) {
 
 	httpServer := server.New(router, *cfg)
 
-	return *httpServer, nil
+	return httpServer, nil
 }
 
 func Run() {
