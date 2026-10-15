@@ -1,66 +1,64 @@
 package middleware
 
-// import (
-// 	"net/http"
-// 	"strings"
+import (
+	"context"
+	"net/http"
+	"strings"
 
-// 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/dto"
-// 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/service"
-// )
+	keyprovider "github.com/SamuraiJeka/SnapLink-gateway-service/internal/key_provider"
+)
 
-// type AuthMiddleware struct {
-// 	service service.AuthService
-// }
+type AuthMiddleware struct {
+	verifier *keyprovider.Verifier
+}
 
-// func NewAuthMiddleware(
-// 	service service.AuthService,
-// ) *AuthMiddleware {
-// 	return &AuthMiddleware{
-// 		service: service,
-// 	}
-// }
+func NewAuthMiddleware(
+	verifier *keyprovider.Verifier,
+) *AuthMiddleware {
+	return &AuthMiddleware{
+		verifier: verifier,
+	}
+}
 
-// func (m *AuthMiddleware) Handle(
-// 	next http.Handler,
-// ) http.Handler {
-// 	return http.HandlerFunc(func(
-// 		w http.ResponseWriter,
-// 		r *http.Request,
-// 	) {
-// 		header := r.Header.Get("Authorization")
-// 		if header == "" {
-// 			http.Error(w, "authorization required", http.StatusUnauthorized)
-// 			return
-// 		}
+const UserIdKey = "user_id"
 
-// 		const prefix = "Bearer "
+func (m *AuthMiddleware) Handle(
+	next http.Handler,
+) http.Handler {
+	return http.HandlerFunc(func(
+		w http.ResponseWriter,
+		r *http.Request,
+	) {
+		header := r.Header.Get("Authorization")
+		if header == "" {
+			http.Error(w, "authorization required", http.StatusUnauthorized)
+			return
+		}
+
+		const prefix = "Bearer "
 		
-// 		if !strings.HasPrefix(header, prefix) {
-// 			http.Error(w, "invalid autorization header", http.StatusUnauthorized)
-// 			return
-// 		}
+		if !strings.HasPrefix(header, prefix) {
+			http.Error(w, "invalid autorization header", http.StatusUnauthorized)
+			return
+		}
 
-// 		token := strings.TrimPrefix(header, prefix)
+		token := strings.TrimPrefix(header, prefix)
 
-// 		resp, err := m.service.ValidateAccessToken(
-// 			r.Context(),
-// 			dto.ValidateRequest{
-// 				Access_token: token,
-// 			},
-// 		)
-// 		if err != nil || !resp.Valid {
-// 			http.Error(w, "invalid access token", http.StatusUnauthorized)
-// 			return
-// 		}
+		userId, err := m.verifier.Verify(r.Context(), token)
+		if err != nil {
+			http.Error(w, "invalid access token", http.StatusUnauthorized)
+			return
+		}
 
-// 		ctx := setUserId(
-// 			r.Context(),
-// 			resp.User_id,
-// 		)
+		ctx := context.WithValue(
+			r.Context(),
+			UserIdKey,
+			userId,
+		)
 
-// 		next.ServeHTTP(
-// 			w,
-// 			r.WithContext(ctx),
-// 		)
-// 	})
-// }
+		next.ServeHTTP(
+			w,
+			r.WithContext(ctx),
+		)
+	})
+}

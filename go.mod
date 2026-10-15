@@ -4,11 +4,11 @@ go 1.25.4
 
 require (
 	github.com/SamuraiJeka/SnapLink-proto v0.4.0
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	google.golang.org/grpc v1.83.0
 )
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect

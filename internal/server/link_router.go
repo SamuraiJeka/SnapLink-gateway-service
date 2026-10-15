@@ -4,26 +4,39 @@ import (
 	"net/http"
 
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/handler"
+	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/middleware"
 )
 
-func registerLinkRouter(mux *http.ServeMux, h *handler.LinkHandler) {
-	mux.HandleFunc(
+func registerLinkRouter(
+	mux *http.ServeMux,
+	h *handler.LinkHandler,
+	authMiddleware middleware.AuthMiddleware,
+) {
+	mux.Handle(
 		"POST /link/",
-		h.Create,
+		authMiddleware.Handle(
+			http.HandlerFunc(h.Create),
+		),
 	)
 
-	mux.HandleFunc(
+	mux.Handle(
 		"GET /link/{id}",
-		h.Get,
+		authMiddleware.Handle(
+			http.HandlerFunc(h.Get),
+		),
 	)
 
-	mux.HandleFunc(
+	mux.Handle(
 		"GET /link/user/{id}",
-		h.GetByUser,
+		authMiddleware.Handle(
+			http.HandlerFunc(h.GetByUser),
+		),
 	)
 
-	mux.HandleFunc(
+	mux.Handle(
 		"DELETE /link/{id}",
-		h.Delete,
+		authMiddleware.Handle(
+			http.HandlerFunc(h.Delete),
+		),
 	)
 }

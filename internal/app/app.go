@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -14,6 +15,7 @@ import (
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/config"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/handler"
 	keyprovider "github.com/SamuraiJeka/SnapLink-gateway-service/internal/key_provider"
+	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/middleware"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/server"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/service"
 )
@@ -21,11 +23,11 @@ import (
 func New(cfg *config.Config) (*server.Server, error) {
 	linkConn, err := grpc.NewClient(cfg.LinkGRPC)
 	if err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("create link gRPC client: %w", err)
 	}
 	authConn, err := grpc.NewClient(cfg.AuthGRPC)
 	if err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("create auth gRPC client: %w", err)
 	}
 
 	linkClient := client.NewLinkClient(linkConn)
@@ -42,6 +44,10 @@ func New(cfg *config.Config) (*server.Server, error) {
 		return nil, err
 	}
 
+	verifier := keyprovider.NewVerifier(keyProvider)
+
+	authMiddleware := middleware.NewAuthMiddleware(verifier)
+
 	linkService := service.NewLinkService(linkClient)
 	authService := service.NewAuthService(authClient)
 
@@ -51,6 +57,7 @@ func New(cfg *config.Config) (*server.Server, error) {
 	router := server.NewRouter(server.Handlers{
 		Link: linkHandler,
 		Auth: authHandler,
+		Middleware: *authMiddleware,
 	})
 
 	httpServer := server.New(router, *cfg)
