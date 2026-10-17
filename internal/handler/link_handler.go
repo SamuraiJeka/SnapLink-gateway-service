@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/dto"
+	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/middleware"
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/service"
 )
 
@@ -33,7 +34,13 @@ func (h *LinkHandler) Create(
 		return
 	}
 
-	link, err := h.service.Create(r.Context(), req)
+	userId, ok := middleware.UserId(r.Context())
+	if !ok {
+		http.Error(w, "user id not found", http.StatusInternalServerError)
+		return
+	}
+
+	link, err := h.service.Create(r.Context(), req, userId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -101,7 +108,18 @@ func (h *LinkHandler) GetByUser(
 		offset = parsed
 	}
 
-	links, err := h.service.GetByUser(r.Context(), uint32(limit), uint32(offset))
+	userId, ok := middleware.UserId(r.Context())
+	if !ok {
+		http.Error(w, "user id not found", http.StatusInternalServerError)
+		return
+	}
+
+	links, err := h.service.GetByUser(
+		r.Context(),
+		userId,
+		uint32(limit),
+		uint32(offset),
+	)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
