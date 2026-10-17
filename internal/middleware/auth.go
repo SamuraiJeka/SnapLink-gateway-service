@@ -20,8 +20,6 @@ func NewAuthMiddleware(
 	}
 }
 
-const UserIdKey = "user_id"
-
 func (m *AuthMiddleware) Handle(
 	next http.Handler,
 ) http.Handler {
@@ -52,7 +50,7 @@ func (m *AuthMiddleware) Handle(
 
 		ctx := context.WithValue(
 			r.Context(),
-			UserIdKey,
+			userIdKey,
 			userId,
 		)
 
