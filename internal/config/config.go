@@ -16,7 +16,7 @@ func Load() *Config {
 	return &Config{
 		HttpAddr: os.Getenv("HTTP_ADDR"),
 		AuthGRPC: os.Getenv("AUTH_GRPC"),
-		LinkGRPC: os.Getenv("LINKGRPC"),
-		RedisAddr: os.Getenv("REDISADDR"),
+		LinkGRPC: os.Getenv("LINK_GRPC"),
+		RedisAddr: os.Getenv("REDIS_ADDR"),
 	}
 }

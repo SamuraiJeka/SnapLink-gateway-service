@@ -43,7 +43,7 @@ func (c *AuthClient) Login(
 		toProtoLogin(req),
 	)
 	if err != nil {
-		return dto.TokenResponse{}, nil
+		return dto.TokenResponse{}, err
 	}
 
 	return toDtoToken(resp), nil
@@ -60,7 +60,7 @@ func (c *AuthClient) Refresh(
 		},
 	)
 	if err != nil {
-		return dto.TokenResponse{}, nil
+		return dto.TokenResponse{}, err
 	}
 
 	return toDtoToken(resp), nil
@@ -94,7 +94,7 @@ func (c *AuthClient) ValidateAccessToken(
 		},
 	)
 	if err != nil {
-		return dto.ValidateResponse{}, nil
+		return dto.ValidateResponse{}, err
 	}
 
 	return toDtoValidate(resp), nil
@@ -108,8 +108,8 @@ func (c *AuthClient) GetPublicKey(
 		&authv1.GetPyblicKeyRequest{},
 	)
 	if err != nil {
-		return []dto.PublicKey{}, nil
+		return []dto.PublicKey{}, err
 	}
 
-	return toDtoPublicKey(resp), err
+	return toDtoPublicKey(resp), nil
 }
