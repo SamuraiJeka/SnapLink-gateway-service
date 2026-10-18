@@ -2,11 +2,13 @@ package app
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"google.golang.org/grpc"
@@ -20,7 +22,26 @@ import (
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/service"
 )
 
-func New(cfg *config.Config) (*server.Server, error) {
+type App struct {
+	server *server.Server
+	linkConn *grpc.ClientConn
+	authConn *grpc.ClientConn
+}
+
+func (a *App) Start() error {
+	return a.server.Start()
+}
+
+func (a *App) Shutdown(ctx context.Context) error {
+	httpErr := a.server.Shutdown(ctx)
+
+	authErr := a.authConn.Close()
+	linkErr := a.linkConn.Close()
+
+	return errors.Join(httpErr, authErr, linkErr)
+}
+
+func New(cfg *config.Config) (*App, error) {
 	linkConn, err := grpc.NewClient(cfg.LinkGRPC)
 	if err != nil {
 		return nil, fmt.Errorf("create link gRPC client: %w", err)
@@ -41,6 +62,8 @@ func New(cfg *config.Config) (*server.Server, error) {
 
 	keyProvider := keyprovider.NewKeyProvider(*authClient)
 	if err := keyProvider.Refresh(ctx); err != nil {
+		_ = authConn.Close()
+		_ = linkConn.Close()
 		return nil, err
 	}
 
@@ -62,7 +85,11 @@ func New(cfg *config.Config) (*server.Server, error) {
 
 	httpServer := server.New(router, *cfg)
 
-	return httpServer, nil
+	return &App{
+		server: httpServer,
+		linkConn: linkConn,
+		authConn: authConn,
+	}, nil
 }
 
 func Run() {
@@ -70,31 +97,42 @@ func Run() {
 
 	application, err := New(cfg)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("initialize application: %v", err)
+		return
 	}
+
+	serverErr := make(chan error, 1)
 
 	go func() {
 		log.Printf("Server started on %s", cfg.HttpAddr)
-
-		if err := application.Start(); err != nil &&
-		err != http.ErrServerClosed {
-			log.Fatal(err)
-		}
+		serverErr <- application.Start()
 	}()
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
+	signalCtx, stop := signal.NotifyContext(
+		context.Background(),
+		os.Interrupt,
+		syscall.SIGTERM,
+	)
+	defer stop()
 
-	<- quit
+	select {
+	case err := <-serverErr:
+		if err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Printf("HTTP server error: %v", err)
+		}
+	case <- signalCtx.Done():
+		log.Println("Shutdown signal received")
 
-	log.Println("Shutdown")
+		ctx, cancel := context.WithTimeout(
+			context.Background(),
+			10*time.Second,
+		)
+		defer cancel()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
-	defer cancel()
-
-	if err := application.Shutdown(ctx); err != nil {
-		log.Printf("Shutdown error %v", err)
+		if err := application.Shutdown(ctx); err != nil {
+			log.Printf("Shutdown error: %v", err)
+		}
 	}
-	
-	log.Println("Server stopped")
+
+	log.Println("Application stopped")
 }
