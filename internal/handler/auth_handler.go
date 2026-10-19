@@ -60,7 +60,7 @@ func (h *AuthHandler) Login(
 		return
 	}
 
-	token, err := h.service.Login(r.Context(),req)
+	token, err := h.service.Login(r.Context(), req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -110,7 +110,7 @@ func (h *AuthHandler) Logout(
 	decoder.DisallowUnknownFields()
 
 	var req dto.Refresh
-	
+
 	if err := decoder.Decode(&req); err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)
 		return

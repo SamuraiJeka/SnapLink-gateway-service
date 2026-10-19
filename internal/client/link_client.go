@@ -62,17 +62,17 @@ func (c *LinkClient) GetByUser(
 		ctx,
 		&linkv1.GetLinkByUserRequest{
 			UserId: user_id,
-			Limit: limit,
+			Limit:  limit,
 			Offset: offset,
 		},
 	)
 	if err != nil {
-		return nil, err 
+		return nil, err
 	}
 
 	links := make([]dto.Link, 0, len(resp.Link))
 
-	for _, link  := range resp.Link {
+	for _, link := range resp.Link {
 		links = append(links, toDtoLink(link))
 	}
 

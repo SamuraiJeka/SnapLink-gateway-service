@@ -9,7 +9,7 @@ import (
 )
 
 type Server struct {
-	httpServer * http.Server
+	httpServer *http.Server
 }
 
 func New(
@@ -19,20 +19,18 @@ func New(
 
 	return &Server{
 		httpServer: &http.Server{
-			Addr: cfg.HttpAddr,
-			Handler: handler,
-			ReadTimeout: 5 * time.Second,
+			Addr:         cfg.HttpAddr,
+			Handler:      handler,
+			ReadTimeout:  5 * time.Second,
 			WriteTimeout: 10 * time.Second,
-			IdleTimeout: 60 * time.Second,
+			IdleTimeout:  60 * time.Second,
 		},
 	}
 }
 
-
 func (s *Server) Start() error {
 	return s.httpServer.ListenAndServe()
 }
-
 
 func (s *Server) Shutdown(
 	ctx context.Context,

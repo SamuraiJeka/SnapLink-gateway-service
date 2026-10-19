@@ -11,7 +11,7 @@ import (
 type KeyProvider struct {
 	client client.AuthClient
 
-	mu sync.RWMutex
+	mu   sync.RWMutex
 	keys map[string]dto.PublicKey
 }
 
@@ -20,7 +20,7 @@ func NewKeyProvider(
 ) *KeyProvider {
 	return &KeyProvider{
 		client: client,
-		keys: make(map[string]dto.PublicKey),
+		keys:   make(map[string]dto.PublicKey),
 	}
 }
 
@@ -31,7 +31,7 @@ func (p *KeyProvider) Refresh(ctx context.Context) error {
 	}
 
 	newKeys := make(map[string]dto.PublicKey, len(keys))
-	
+
 	for _, key := range keys {
 		newKeys[key.Id] = key
 	}

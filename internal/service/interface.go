@@ -6,7 +6,6 @@ import (
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/dto"
 )
 
-
 type LinkClient interface {
 	Create(ctx context.Context, req dto.CreateLink, user_id uint64) (dto.Link, error)
 	Get(ctx context.Context, idx uint64) (dto.Link, error)

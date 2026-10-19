@@ -8,8 +8,8 @@ import (
 )
 
 type Handlers struct {
-	Link *handler.LinkHandler
-	Auth *handler.AuthHandler
+	Link       *handler.LinkHandler
+	Auth       *handler.AuthHandler
 	Middleware middleware.AuthMiddleware
 }
 

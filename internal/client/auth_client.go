@@ -79,7 +79,7 @@ func (c *AuthClient) Logout(
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 

@@ -10,7 +10,6 @@ import (
 	"github.com/SamuraiJeka/SnapLink-gateway-service/internal/service"
 )
 
-
 type LinkHandler struct {
 	service service.LinkService
 }
@@ -54,7 +53,6 @@ func (h *LinkHandler) Create(
 		return
 	}
 }
-
 
 func (h *LinkHandler) Get(
 	w http.ResponseWriter,
@@ -100,7 +98,7 @@ func (h *LinkHandler) GetByUser(
 	}
 
 	if value := query.Get("offset"); value != "" {
-		parsed , err := strconv.Atoi(value)
+		parsed, err := strconv.Atoi(value)
 		if err != nil || parsed < 0 {
 			http.Error(w, "invalid offset", http.StatusBadRequest)
 			return

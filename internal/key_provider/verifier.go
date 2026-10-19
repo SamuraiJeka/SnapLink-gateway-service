@@ -10,9 +10,9 @@ import (
 )
 
 var (
-	ErrInvalidToken = errors.New("invalid token")
+	ErrInvalidToken   = errors.New("invalid token")
 	ErrWrongTokenType = errors.New("worng token type")
-	ErrKeyNotFound = errors.New("signing key not found")
+	ErrKeyNotFound    = errors.New("signing key not found")
 )
 
 const AccessToken = "access"

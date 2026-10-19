@@ -12,60 +12,60 @@ func toProtoCreateRequest(
 ) *linkv1.CreateLinkRequest {
 	return &linkv1.CreateLinkRequest{
 		UserId: user_id,
-		Url: req.Url,
+		Url:    req.Url,
 	}
 }
 
 func toDtoLink(link *linkv1.Link) dto.Link {
 	return dto.Link{
-		Id: link.Id,
-		UserId: link.UserId,
-		BaseUrl: link.BaseUrl,
+		Id:       link.Id,
+		UserId:   link.UserId,
+		BaseUrl:  link.BaseUrl,
 		ShortUrl: link.ShortUrl,
 	}
 }
 
 func toProtoRegister(req dto.Register) *authv1.RegisterRequest {
 	return &authv1.RegisterRequest{
-		Name: req.Name,
-		Email: req.Email,
+		Name:     req.Name,
+		Email:    req.Email,
 		Password: req.Password,
 	}
 }
 
 func toProtoLogin(req dto.Login) *authv1.LoginRequest {
 	return &authv1.LoginRequest{
-		Email: req.Email,
+		Email:    req.Email,
 		Password: req.Password,
 	}
 }
 
 func toDtoToken(token *authv1.TokenResponse) dto.TokenResponse {
 	return dto.TokenResponse{
-		Access_token: token.AccessToken,
+		Access_token:  token.AccessToken,
 		Refresh_token: token.RefreshToken,
 	}
 }
 
 func toDtoValidate(vld *authv1.ValidateAccessTokenResponse) dto.ValidateResponse {
 	return dto.ValidateResponse{
-		Valid: vld.Valid,
+		Valid:   vld.Valid,
 		User_id: vld.UserId,
 	}
 }
 
 func toDtoPublicKey(req *authv1.GetPyblicKeyResponse) []dto.PublicKey {
 	public_keys := make([]dto.PublicKey, len(req.Keys))
-	
+
 	for _, key := range req.Keys {
 		public_keys = append(
 			public_keys,
 			dto.PublicKey{
-				Id: key.Kid,
+				Id:        key.Kid,
 				Algorithm: key.Algorithm,
-				KeyType: key.KeyType,
-				Curve: key.Curve,
-				Key: key.PublicKey,
+				KeyType:   key.KeyType,
+				Curve:     key.Curve,
+				Key:       key.PublicKey,
 			},
 		)
 	}

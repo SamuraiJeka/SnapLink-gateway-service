@@ -23,7 +23,7 @@ import (
 )
 
 type App struct {
-	server *server.Server
+	server   *server.Server
 	linkConn *grpc.ClientConn
 	authConn *grpc.ClientConn
 }
@@ -55,8 +55,8 @@ func New(cfg *config.Config) (*App, error) {
 	authClient := client.NewAuthClient(authConn)
 
 	ctx, cancel := context.WithTimeout(
-	context.Background(),
-	5*time.Second,
+		context.Background(),
+		5*time.Second,
 	)
 	defer cancel()
 
@@ -78,15 +78,15 @@ func New(cfg *config.Config) (*App, error) {
 	authHandler := handler.NewAuthHandler(*authService)
 
 	router := server.NewRouter(server.Handlers{
-		Link: linkHandler,
-		Auth: authHandler,
+		Link:       linkHandler,
+		Auth:       authHandler,
 		Middleware: *authMiddleware,
 	})
 
 	httpServer := server.New(router, *cfg)
 
 	return &App{
-		server: httpServer,
+		server:   httpServer,
 		linkConn: linkConn,
 		authConn: authConn,
 	}, nil
@@ -120,7 +120,7 @@ func Run() {
 		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Printf("HTTP server error: %v", err)
 		}
-	case <- signalCtx.Done():
+	case <-signalCtx.Done():
 		log.Println("Shutdown signal received")
 
 		ctx, cancel := context.WithTimeout(

@@ -34,7 +34,7 @@ func (m *AuthMiddleware) Handle(
 		}
 
 		const prefix = "Bearer "
-		
+
 		if !strings.HasPrefix(header, prefix) {
 			http.Error(w, "invalid autorization header", http.StatusUnauthorized)
 			return

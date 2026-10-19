@@ -27,12 +27,12 @@ func (s *LinkService) Create(
 func (s *LinkService) Get(
 	ctx context.Context,
 	idx uint64,
-) (dto.Link, error)  {
+) (dto.Link, error) {
 	return s.client.Get(ctx, idx)
 }
 
 func (s *LinkService) GetByUser(
-	ctx context.Context, 
+	ctx context.Context,
 	userId uint64,
 	limit uint32,
 	offset uint32,
