@@ -1,5 +1,5 @@
-github.com/SamuraiJeka/SnapLink-proto v0.4.0 h1:Xd9vOYuIZG7TC9FqDbJmKj2nD0eEGWjbe/C9m7CCK/E=
-github.com/SamuraiJeka/SnapLink-proto v0.4.0/go.mod h1:m5QtBtSG8nxyRZFMNV1BSpvQPIGwcGwAd6WSQd3svx8=
+github.com/SamuraiJeka/SnapLink-proto v0.4.1 h1:CIRshLtvS+R3bTh3M3skuiicNcEl9jwenT7QC+uIOk4=
+github.com/SamuraiJeka/SnapLink-proto v0.4.1/go.mod h1:m5QtBtSG8nxyRZFMNV1BSpvQPIGwcGwAd6WSQd3svx8=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/go-logr/logr v1.4.3 h1:CjnDlHq8ikf6E492q6eKboGOC0T8CDaOvkHCIg8idEI=

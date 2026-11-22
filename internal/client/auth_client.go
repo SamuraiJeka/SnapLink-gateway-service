@@ -103,9 +103,9 @@ func (c *AuthClient) ValidateAccessToken(
 func (c *AuthClient) GetPublicKey(
 	ctx context.Context,
 ) ([]dto.PublicKey, error) {
-	resp, err := c.client.GetPyblicKey(
+	resp, err := c.client.GetPublicKey(
 		ctx,
-		&authv1.GetPyblicKeyRequest{},
+		&authv1.GetPublicKeyRequest{},
 	)
 	if err != nil {
 		return []dto.PublicKey{}, err

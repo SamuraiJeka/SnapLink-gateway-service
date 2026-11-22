@@ -3,7 +3,7 @@ module github.com/SamuraiJeka/SnapLink-gateway-service
 go 1.25.4
 
 require (
-	github.com/SamuraiJeka/SnapLink-proto v0.4.0
+	github.com/SamuraiJeka/SnapLink-proto v0.4.1
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	google.golang.org/grpc v1.83.0
 )
