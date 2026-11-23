@@ -27,7 +27,7 @@ func registerLinkRouter(
 	)
 
 	mux.Handle(
-		"GET /link/user/{id}",
+		"GET /link/user",
 		authMiddleware.Handle(
 			http.HandlerFunc(h.GetByUser),
 		),

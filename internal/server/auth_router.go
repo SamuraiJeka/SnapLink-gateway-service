@@ -13,22 +13,22 @@ func registerAuthRouter(mux *http.ServeMux, h *handler.AuthHandler) {
 	)
 
 	mux.HandleFunc(
-		"GET /auth/login",
+		"POST /auth/login",
 		h.Login,
 	)
 
 	mux.HandleFunc(
-		"GET /auth/refresh",
+		"POST /auth/refresh",
 		h.Refresh,
 	)
 
 	mux.HandleFunc(
-		"GET /auth/logout",
+		"POST /auth/logout",
 		h.Logout,
 	)
 
 	mux.HandleFunc(
-		"GET /auth/validate",
+		"POST /auth/validate",
 		h.ValidateAccessToken,
 	)
 }
